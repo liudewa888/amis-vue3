@@ -1,3 +1,4 @@
+// 返回具体类型
 export function typeofD(obj) {
   const typeList = ['Array', 'Date', 'RegExp', 'Object', 'Error'];
   if (obj === null) return String(null);

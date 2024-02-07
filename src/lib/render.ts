@@ -2,22 +2,34 @@ import { h } from 'vue';
 
 import { typeofD } from '@/utils/utils';
 
+import AmisForm from '@/components/form.vue';
 
+const demo1F = {
+  type: 'page',
+  body: {
+    type: 'form',
+    api: '/amis/api/mock2/form/saveForm',
+    body: [
+      {
+        type: 'input-text',
+        name: 'name',
+        label: '姓名：',
+      },
+      {
+        name: 'email',
+        type: 'input-email',
+        label: '邮箱：',
+      },
+    ],
+  },
+};
 
 const demo = {
   type: 'div',
   body: [
     {
-      type: 'amis-button',
-      body: '按钮',
-    },
-    {
-      type: 'h3',
-      body: '标题',
-    },
-    {
-      type: 'span',
-      body: '内容',
+      type: 'ElButton',
+      body: 'test',
     },
   ],
 };
@@ -27,7 +39,6 @@ export function draw(schema: any = demo) {
   const body = schema.body;
   let children: any = [];
   const typeDetail = typeofD(body);
-
   if (typeDetail === 'object') {
     children = draw(body);
   } else if (typeDetail === 'array') {
@@ -35,6 +46,5 @@ export function draw(schema: any = demo) {
   } else {
     children = body;
   }
-
-  return h(type, { }, children);
+  return h(type, {}, children);
 }
