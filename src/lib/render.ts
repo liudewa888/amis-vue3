@@ -2,13 +2,12 @@ import { h } from 'vue';
 
 import { typeofD } from '@/utils/utils';
 
-import AmisForm from '@/components/form.vue';
+import Form from '@/components/form.vue';
 
 const demo1F = {
   type: 'page',
   body: {
     type: 'form',
-    api: '/amis/api/mock2/form/saveForm',
     body: [
       {
         type: 'input-text',
@@ -34,9 +33,13 @@ const demo = {
   ],
 };
 
-export function draw(schema: any = demo) {
-  const type = schema.type;
+const componentsMap = new Map([['AmisForm', Form]]);
+
+export function draw(h, schema: any = demo) {
+  let type = schema.type;
+  type = componentsMap.has(type) ? componentsMap.get(type) : type;
   const body = schema.body;
+
   let children: any = [];
   const typeDetail = typeofD(body);
   if (typeDetail === 'object') {
@@ -47,4 +50,12 @@ export function draw(schema: any = demo) {
     children = body;
   }
   return h(type, {}, children);
+}
+
+export function renderFn() {
+  return {
+    render(h) {
+      return draw(h);
+    },
+  };
 }

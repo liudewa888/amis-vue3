@@ -1,16 +1,12 @@
-<template>
-  <!-- <Component :is="draw()"></Component> -->
-  <demo></demo>
-</template>
+<template></template>
 
-<script setup lang="ts">
-import { h } from 'vue';
-import { draw } from '@/lib/render';
-import demo from '@/components/demo.vue';
+<script lang="ts">
+import { draw, renderFn } from '@/lib/render';
 
-// render(draw(), document.querySelector('#main'));
-const render = () => {
-  return h('el-button', {}, '测试');
+export default {
+  setup() {
+    return () => renderFn();
+  },
 };
 </script>
 <style></style>
