@@ -14,5 +14,6 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
     Form: typeof import('./src/components/form.vue')['default']
+    InputText: typeof import('./src/components/form/input/input-text.vue')['default']
   }
 }

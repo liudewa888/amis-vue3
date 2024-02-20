@@ -2,9 +2,10 @@ import { h } from 'vue';
 
 import { typeofD } from '@/utils/utils';
 
-import Form from '@/components/form.vue';
+import Form from '@/components/form/form.vue';
+import inputText from '@/components/form/input/input-text.vue';
 
-const demo1F = {
+const demo1 = {
   type: 'page',
   body: {
     type: 'form',
@@ -27,15 +28,23 @@ const demo = {
   type: 'div',
   body: [
     {
-      type: 'ElButton',
-      body: 'test',
+      type: 'AmisForm',
+      body: [
+        {
+          type: 'AmisInputText',
+          label: '邮箱',
+        },
+      ],
     },
   ],
 };
 
-const componentsMap = new Map([['AmisForm', Form]]);
+const componentsMap = new Map([
+  ['AmisForm', Form],
+  ['AmisInputText', inputText],
+]);
 
-export function draw(h, schema: any = demo) {
+export function draw(schema: any = demo) {
   let type = schema.type;
   type = componentsMap.has(type) ? componentsMap.get(type) : type;
   const body = schema.body;
@@ -49,13 +58,9 @@ export function draw(h, schema: any = demo) {
   } else {
     children = body;
   }
-  return h(type, {}, children);
+  return h(type, { label: '电话' }, children);
 }
 
 export function renderFn() {
-  return {
-    render(h) {
-      return draw(h);
-    },
-  };
+  return draw();
 }
