@@ -3,7 +3,7 @@ import { h } from 'vue';
 import { typeofD } from '@/utils/utils';
 
 import Form from '@/components/form/form.vue';
-import inputText from '@/components/form/input/input-text.vue';
+import Input from '@/components/form/input/input.vue';
 
 const demo1 = {
   type: 'page',
@@ -16,8 +16,8 @@ const demo1 = {
         label: '姓名：',
       },
       {
-        name: 'email',
         type: 'input-email',
+        name: 'email',
         label: '邮箱：',
       },
     ],
@@ -25,14 +25,20 @@ const demo1 = {
 };
 
 const demo = {
-  type: 'div',
+  type: 'page',
   body: [
     {
-      type: 'AmisForm',
+      type: 'form',
       body: [
         {
-          type: 'AmisInputText',
-          label: '邮箱',
+          type: 'input-text',
+          label: '账号',
+          name: 'uname',
+        },
+        {
+          type: 'input-password',
+          label: '密码',
+          name: 'password',
         },
       ],
     },
@@ -40,27 +46,34 @@ const demo = {
 };
 
 const componentsMap = new Map([
-  ['AmisForm', Form],
-  ['AmisInputText', inputText],
+  ['amis-form', Form],
+  ['amis-input-text', Input],
+  ['amis-input-password', Input],
 ]);
 
-export function draw(schema: any = demo) {
-  let type = schema.type;
+export function render(schema: any = demo) {
+  let type = 'amis-' + schema.type;
   type = componentsMap.has(type) ? componentsMap.get(type) : type;
   const body = schema.body;
-
   let children: any = [];
+  let props = {};
   const typeDetail = typeofD(body);
   if (typeDetail === 'object') {
-    children = draw(body);
+    children = render(body);
   } else if (typeDetail === 'array') {
-    children = body.map(item => draw(item));
+    children = body.map(item => render(item));
   } else {
+    // 单独处理input类型
+    const typeList: [] = schema.type.split('-');
+    if (typeList.length > 1) {
+      schema.type = typeList.at(-1);
+    }
+    props = schema;
     children = body;
   }
-  return h(type, { label: '电话' }, children);
+  return h(type, { ...props }, children);
 }
 
 export function renderFn() {
-  return draw();
+  return render();
 }

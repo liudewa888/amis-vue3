@@ -13,7 +13,8 @@ declare module '@vue/runtime-core' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
-    Form: typeof import('./src/components/form.vue')['default']
+    Form: typeof import('./src/components/form/form.vue')['default']
+    Input: typeof import('./src/components/form/input/input.vue')['default']
     InputText: typeof import('./src/components/form/input/input-text.vue')['default']
   }
 }
