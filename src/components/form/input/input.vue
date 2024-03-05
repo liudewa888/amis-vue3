@@ -1,12 +1,13 @@
 <template>
   <el-form-item :label="label">
-    <el-input :type="type" :name="name" />
+    <el-input :type="type" :name="name" @input="val => emits('update:modelValue', val)" :model-value="modelValue" />
   </el-form-item>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 const val = ref(null);
+const emits = defineEmits();
 const { label, type, name } = defineProps({
   label: {
     type: String,
@@ -20,7 +21,7 @@ const { label, type, name } = defineProps({
     type: String,
     default: '',
   },
-  value: {
+  modelValue: {
     type: String,
     default: '',
   },
