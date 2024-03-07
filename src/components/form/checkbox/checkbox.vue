@@ -1,13 +1,18 @@
 <template>
-  <el-form-item :label="label">
-    <el-input :type="type" :name="name" :model-value="modelValue" @input="val => emits('update:modelValue', val)" />
+  <el-form-item>
+    <el-checkbox
+      :name="name"
+      :label="label"
+      @change="val => emits('update:modelValue', val)"
+      :model-value="modelValue"
+    />
   </el-form-item>
 </template>
 
 <script lang="ts" setup>
 import { ref, defineEmits } from 'vue';
 const val = ref(null);
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits();
 const { label, type, name } = defineProps({
   label: {
     type: String,

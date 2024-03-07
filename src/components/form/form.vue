@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="formRef" :model="formData">
+  <el-form ref="formRef" v-bind="baseFormProps">
     <component
       :is="item.component"
       v-bind="{ ...item }"
@@ -9,8 +9,9 @@
     ></component>
     <el-form-item>
       <div class="flex justify-end w-100%">
-        <el-button>重置</el-button>
-        <el-button type="primary" @click="submit(formRef)">提交</el-button>
+        <el-button :type="item.elType" @click="formActionsDic[item.type]" v-for="item in formActions">{{
+          item.label
+        }}</el-button>
       </div>
     </el-form-item>
   </el-form>
@@ -20,26 +21,68 @@
 import { ref, reactive, defineProps } from 'vue';
 import { typeofD } from '@/utils/utils';
 import Input from '@/components/form/input/input.vue';
+import Checkbox from '@/components/form/checkbox/checkbox.vue';
 
 const componentsMap = new Map([
   ['input-text', Input],
   ['input-password', Input],
+  ['checkbox', Checkbox],
 ]);
 
-const { schemas, label } = defineProps({
+const { schemas } = defineProps({
   schemas: {
     type: Object,
     default: {},
   },
-  label: {
-    type: String,
-    default: '',
-  },
 });
 const formRef = ref(null);
 const formData = reactive({});
-const submit = item => {
-  console.log(formData, 898);
+
+const baseFormActions = [
+  {
+    type: 'reset',
+    label: '重置',
+  },
+  {
+    type: 'submit',
+    label: '登录',
+    elType: 'primary',
+  },
+];
+
+const initFormData = () => {
+  const data = schemas.data;
+  if (typeofD(data) === 'object') {
+    Object.keys(data).forEach(key => {
+      formData[key] = data[key];
+    });
+  }
+};
+
+const formActions = schemas.actions || baseFormActions;
+
+const baseFormProps = {
+  model: formData,
+  rules: {},
+  inline: false,
+  'label-position': 'right',
+  labelWidth: 80,
+  'require-asterisk-position': 'left',
+  'show-message': true,
+  'inline-message': false,
+  'status-icon': false,
+  'validate-on-rule-change': true,
+  size: '',
+  disabled: false,
+  'scroll-to-error': false,
+};
+
+const formSubmit = formRef => {
+  console.log(formData);
+};
+
+const formReset = formRef => {
+  console.log('form reset');
 };
 
 const addComponentProp = schema => {
@@ -62,8 +105,17 @@ const addComponentProp = schema => {
   }
 };
 const init = () => {
+  Object.keys(baseFormProps).forEach(key => {
+    baseFormProps[key] = schemas[key];
+  });
   addComponentProp(schemas);
 };
 
+initFormData();
 init();
+
+const formActionsDic = {
+  submit: formSubmit,
+  reset: formReset,
+};
 </script>
