@@ -1,7 +1,5 @@
 <template>
-  <el-form-item :label="label">
-    <el-input :type="type" :name="name" :model-value="modelValue" @input="val => emits('update:modelValue', val)" />
-  </el-form-item>
+  <el-input :type="type" :name="name" :model-value="modelValue" @input="val => emits('update:modelValue', val)" />
 </template>
 
 <script lang="ts" setup>

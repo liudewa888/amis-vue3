@@ -6,19 +6,15 @@ import AmisForm from '@/components/form/form.vue';
 
 const schema = {
   type: 'form',
-  api: {
-    method: 'post',
-    url: '/mock/form/test',
-    data: {
-      myNm: '${name}',
-      myPsw: '${password}',
-    },
-  },
+  api: '/mock/form/test',
   labelWidth: 100,
   data: {
     uname: '张三',
     password: '123',
     rememberMe: true,
+  },
+  rules:{
+    
   },
   body: [
     {

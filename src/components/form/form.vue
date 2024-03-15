@@ -1,12 +1,8 @@
 <template>
   <el-form ref="formRef" v-bind="baseFormProps">
-    <component
-      :is="item.component"
-      v-bind="{ ...item }"
-      v-model="formData[item.name]"
-      v-for="(item, index) in schemas.body"
-      :key="index"
-    ></component>
+    <el-form-item :label="item.label" v-for="(item, index) in schemas.body" :key="index">
+      <component :is="item.component" v-bind="{ ...item }" v-model="formData[item.name]"></component>
+    </el-form-item>
     <el-form-item>
       <div class="flex justify-end w-100%">
         <el-button :type="item.elType" @click="formActionsDic[item.type]" v-for="item in formActions">{{
@@ -61,6 +57,26 @@ const initFormData = () => {
 
 const formActions = schemas.actions || baseFormActions;
 
+const baseFormApi = {
+  method: 'post',
+  url: '',
+  data: {},
+  dataType: 'json',
+  headers: {},
+  msg: {},
+};
+
+const initFormAPi = () => {
+  const data = schemas.api;
+  if (typeofD(data) === 'object') {
+    Object.keys(data).forEach(key => {
+      baseFormApi[key] = data[key];
+    });
+  } else if (typeofD(data) === 'string') {
+    baseFormApi.url = data;
+  }
+};
+
 const baseFormProps = {
   model: formData,
   rules: {},
@@ -77,12 +93,24 @@ const baseFormProps = {
   'scroll-to-error': false,
 };
 
+const baseFormItemProps = {
+  label: '',
+  'label-width': '',
+  required: false,
+  error: null,
+  'show-message': true,
+  'inline-message': '',
+  size: '',
+};
+
 const formSubmit = formRef => {
-  console.log(formData);
+  baseFormApi.data = formData;
+  console.log(baseFormApi, 'submit');
 };
 
 const formReset = formRef => {
-  console.log('form reset');
+  if (!formRef) return;
+  formRef.resetFields();
 };
 
 const addComponentProp = schema => {
@@ -111,11 +139,12 @@ const init = () => {
   addComponentProp(schemas);
 };
 
-initFormData();
-init();
-
 const formActionsDic = {
   submit: formSubmit,
   reset: formReset,
 };
+
+initFormData();
+initFormAPi();
+init();
 </script>

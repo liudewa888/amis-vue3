@@ -1,12 +1,5 @@
 <template>
-  <el-form-item>
-    <el-checkbox
-      :name="name"
-      :label="label"
-      @change="val => emits('update:modelValue', val)"
-      :model-value="modelValue"
-    />
-  </el-form-item>
+  <el-checkbox :name="name" :label="label" @change="val => emits('update:modelValue', val)" :model-value="modelValue" />
 </template>
 
 <script lang="ts" setup>
