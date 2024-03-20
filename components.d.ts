@@ -15,8 +15,16 @@ declare module '@vue/runtime-core' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElRadio: typeof import('element-plus/es')['ElRadio']
+    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     Form: typeof import('./src/components/form/form.vue')['default']
     Input: typeof import('./src/components/form/input/input.vue')['default']
     InputText: typeof import('./src/components/form/input/input-text.vue')['default']
+    Radio: typeof import('./src/components/form/radio/radio.vue')['default']
+    Select: typeof import('./src/components/form/select/select.vue')['default']
+    Switch: typeof import('./src/components/form/switch/index.vue')['default']
   }
 }

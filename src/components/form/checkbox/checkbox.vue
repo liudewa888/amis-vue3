@@ -4,9 +4,8 @@
 
 <script lang="ts" setup>
 import { ref, defineEmits } from 'vue';
-const val = ref(null);
 const emits = defineEmits();
-const { label, type, name } = defineProps({
+const { label, type, name, modelValue } = defineProps({
   label: {
     type: String,
     default: '',
@@ -20,7 +19,7 @@ const { label, type, name } = defineProps({
     default: '',
   },
   modelValue: {
-    type: String,
+    type: true,
     default: '',
   },
 });

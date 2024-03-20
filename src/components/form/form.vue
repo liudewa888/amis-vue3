@@ -1,11 +1,11 @@
 <template>
-  <el-form ref="formRef" v-bind="baseFormProps">
-    <el-form-item :label="item.label" v-for="(item, index) in schemas.body" :key="index">
+  <el-form ref="formRef" v-bind="baseFormProps" :model="formData">
+    <el-form-item v-bind="item.formItemProps" v-for="(item, index) in schemas.body" :key="index">
       <component :is="item.component" v-bind="{ ...item }" v-model="formData[item.name]"></component>
     </el-form-item>
     <el-form-item>
       <div class="flex justify-end w-100%">
-        <el-button :type="item.elType" @click="formActionsDic[item.type]" v-for="item in formActions">{{
+        <el-button :type="item.elType" @click="formActionsDic[item.type](formRef)" v-for="item in formActions">{{
           item.label
         }}</el-button>
       </div>
@@ -15,14 +15,20 @@
 
 <script setup lang="ts">
 import { ref, reactive, defineProps } from 'vue';
+import { ElMessage } from 'element-plus';
 import { typeofD } from '@/utils/utils';
 import Input from '@/components/form/input/input.vue';
 import Checkbox from '@/components/form/checkbox/checkbox.vue';
-
+import Radio from '@/components/form/radio/radio.vue';
+import Select from '@/components/form/select/select.vue';
+import Switch from '@/components/form/switch/index.vue';
 const componentsMap = new Map([
   ['input-text', Input],
   ['input-password', Input],
   ['checkbox', Checkbox],
+  ['radio', Radio],
+  ['select', Select],
+  ['switch', Switch],
 ]);
 
 const { schemas } = defineProps({
@@ -94,6 +100,7 @@ const baseFormProps = {
 };
 
 const baseFormItemProps = {
+  prop: '',
   label: '',
   'label-width': '',
   required: false,
@@ -103,9 +110,42 @@ const baseFormItemProps = {
   size: '',
 };
 
+const initFormItemData = () => {
+  const data = schemas.body;
+  if (typeofD(data) === 'array') {
+    data.forEach(item => {
+      if (!item.formItemProps) {
+        item.formItemProps = {};
+      }
+      Object.keys(baseFormItemProps).forEach(key => {
+        if (key === 'prop') {
+          item.formItemProps[key] = item.name;
+        } else {
+          item.formItemProps[key] = item[key];
+        }
+      });
+    });
+  }
+};
+
 const formSubmit = formRef => {
   baseFormApi.data = formData;
   console.log(baseFormApi, 'submit');
+  if (!formRef) return;
+  formRef.validate(valid => {
+    if (valid) {
+      ElMessage({
+        message: '表单提交成功',
+        type: 'success',
+      });
+    } else {
+      ElMessage({
+        message: '依赖的部分字段没有通过验证',
+        type: 'error',
+      });
+      return false;
+    }
+  });
 };
 
 const formReset = formRef => {
@@ -144,6 +184,7 @@ const formActionsDic = {
   reset: formReset,
 };
 
+initFormItemData();
 initFormData();
 initFormAPi();
 init();

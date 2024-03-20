@@ -13,8 +13,14 @@ const schema = {
     password: '123',
     rememberMe: true,
   },
-  rules:{
-    
+  rules: {
+    password: [
+      {
+        required: true,
+        message: '密码不能为空',
+        trigger: 'blur',
+      },
+    ],
   },
   body: [
     {
@@ -31,6 +37,46 @@ const schema = {
       type: 'checkbox',
       label: '记住登录',
       name: 'rememberMe',
+    },
+    {
+      type: 'switch',
+      label: '开关',
+      name: 'switch',
+    },
+    {
+      type: 'radio',
+      label: '性别',
+      name: 'sex',
+      options: [
+        {
+          label: '男',
+          value: '1',
+        },
+        {
+          label: '女',
+          value: '0',
+        },
+      ],
+    },
+    {
+      type: 'select',
+      label: '选项',
+      name: 'sex1',
+      placeholder: '请选择',
+      options: [
+        {
+          label: '男',
+          value: '1',
+        },
+        {
+          label: '女',
+          value: '0',
+        },
+        {
+          label: '未知',
+          value: '2',
+        },
+      ],
     },
   ],
 };
